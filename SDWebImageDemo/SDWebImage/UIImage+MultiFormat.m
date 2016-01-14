@@ -140,37 +140,22 @@
 +(UIImage *)compressImageWith:(UIImage *)image newSize:(CGSize)newSize
 {
     size_t destWidth, destHeight;
-    if (image.size.width > image.size.height)
+    if (image.size.width < image.size.height)
     {
-        if (image.size.height < newSize.height) {
-            return image;
-        }
         destWidth = (size_t)newSize.width;
         destHeight = (size_t)(image.size.height * newSize.width / image.size.width);
     }
     else
     {
-        if (image.size.width < newSize.width) {
-            return image;
-        }
         destHeight = (size_t)newSize.height;
         destWidth = (size_t)(image.size.width * newSize.height / image.size.height);
     }
-    if (destWidth > newSize.width)
-    {
-        destWidth = (size_t)newSize.width;
-        destHeight = (size_t)(image.size.height * newSize.width / image.size.width);
-    }
-    if (destHeight > newSize.height)
-    {
-        destHeight = (size_t)newSize.height;
-        destWidth = (size_t)(image.size.width * newSize.height / image.size.height);
+    
+    if (image.size.width < destWidth || image.size.height < destHeight){
+        return image;
     }
     
     newSize = CGSizeMake(destWidth, destHeight);
-    
-//    destWidth = (size_t)(newSize.width * image.scale);
-//    destHeight = (size_t)(newSize.height * image.scale);
     
     if (image.imageOrientation == UIImageOrientationLeft
         || image.imageOrientation == UIImageOrientationLeftMirrored
