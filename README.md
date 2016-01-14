@@ -1,2 +1,2 @@
 # SDWebImageMemory
-Cache images wtih useful size by SDWebImage freamwork
+Cache images wtih useful size by SDWebImage frameworks
