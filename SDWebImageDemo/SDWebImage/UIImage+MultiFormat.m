@@ -182,7 +182,7 @@
         destHeight = temp;
     }
     
-    CGContextRef bmContext = NYXCreateARGBBitmapContext(destWidth, destHeight, destWidth * 4, NYXImageHasAlpha(image.CGImage));
+    CGContextRef bmContext = SDCreateARGBBitmapContext(destWidth, destHeight, destWidth * 4, SDImageHasAlpha(image.CGImage));
     if (!bmContext)
         return nil;
     
@@ -205,7 +205,7 @@
     return scaled;
 }
 
-CGContextRef NYXCreateARGBBitmapContext(const size_t width, const size_t height, const size_t bytesPerRow, BOOL withAlpha)
+CGContextRef SDCreateARGBBitmapContext(const size_t width, const size_t height, const size_t bytesPerRow, BOOL withAlpha)
 {
     CGImageAlphaInfo alphaInfo = (withAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNoneSkipFirst);
     CGContextRef bmContext = CGBitmapContextCreate(NULL, width, height, 8/*Bits per component*/, bytesPerRow, CGColorSpaceCreateDeviceRGB(), kCGBitmapByteOrderDefault | alphaInfo);
@@ -213,7 +213,7 @@ CGContextRef NYXCreateARGBBitmapContext(const size_t width, const size_t height,
     return bmContext;
 }
 
-BOOL NYXImageHasAlpha(CGImageRef imageRef)
+BOOL SDImageHasAlpha(CGImageRef imageRef)
 {
     CGImageAlphaInfo alpha = CGImageGetAlphaInfo(imageRef);
     BOOL hasAlpha = (alpha == kCGImageAlphaFirst || alpha == kCGImageAlphaLast || alpha == kCGImageAlphaPremultipliedFirst || alpha == kCGImageAlphaPremultipliedLast);
