@@ -18,8 +18,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 200, 200)];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+//    imageView.clipsToBounds = YES;
     [imageView sd_setImageWithURL:[NSURL URLWithString:@"http://7xavig.com2.z0.glb.qiniucdn.com/eac51bf1377a5342a4259c485a4c811b.png"] placeholderImage:nil];
     [self.view addSubview:imageView];
 }

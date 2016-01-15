@@ -260,11 +260,23 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
 }
 
 - (UIImage *)diskImageForKey:(NSString *)key {
+    return [self diskImageForKey:key size:CGSizeZero];
+}
+
+- (UIImage *)diskImageForKey:(NSString *)key size:(CGSize)i_size{
+    
     NSData *data = [self diskImageDataBySearchingAllPathsForKey:key];
     if (data) {
         UIImage *image = [UIImage sd_imageWithData:data];
         image = [self scaledImageForKey:key image:image];
         image = [UIImage decodedImageWithImage:image];
+        if (!(CGSizeEqualToSize(i_size, CGSizeZero)||i_size.width * i_size.height == 0))
+        {
+            // when disk image size lower to need size , return nil image for download lager image!
+            if (image.size.width < i_size.width || image.size.height < i_size.height) {
+                return nil;
+            }
+        }
         return image;
     }
     else {
@@ -277,41 +289,47 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
 }
 
 - (NSOperation *)queryDiskCacheForKey:(NSString *)key done:(SDWebImageQueryCompletedBlock)doneBlock {
+    
+    return [self queryDiskCacheForKey:key size:CGSizeZero done:doneBlock];
+}
+
+
+- (NSOperation *)queryDiskCacheForKey:(NSString *)key size:(CGSize)i_size done:(SDWebImageQueryCompletedBlock)doneBlock {
     if (!doneBlock) {
         return nil;
     }
-
+    
     if (!key) {
         doneBlock(nil, SDImageCacheTypeNone);
         return nil;
     }
-
+    
     // First check the in-memory cache...
     UIImage *image = [self imageFromMemoryCacheForKey:key];
     if (image) {
         doneBlock(image, SDImageCacheTypeMemory);
         return nil;
     }
-
+    
     NSOperation *operation = [NSOperation new];
     dispatch_async(self.ioQueue, ^{
         if (operation.isCancelled) {
             return;
         }
-
+        
         @autoreleasepool {
-            UIImage *diskImage = [self diskImageForKey:key];
+            UIImage *diskImage = [self diskImageForKey:key size:i_size];
             if (diskImage) {
                 CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale;
                 [self.memCache setObject:diskImage forKey:key cost:cost];
             }
-
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 doneBlock(diskImage, SDImageCacheTypeDisk);
             });
         }
     });
-
+    
     return operation;
 }
 

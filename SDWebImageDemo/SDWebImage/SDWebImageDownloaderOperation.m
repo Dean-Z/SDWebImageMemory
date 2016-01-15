@@ -345,9 +345,13 @@
         }
         else {
             UIImage *image = [UIImage sd_imageWithData:self.imageData maxSize:self.imageMaxSize];
+            
             //将等比压缩过的image在赋在转成data赋给self.imageData
             NSData *data = UIImageJPEGRepresentation(image, 1);
-            self.imageData =  [NSMutableData dataWithData:data];
+            if (data.length < self.imageData.length)
+            {
+               self.imageData =  [NSMutableData dataWithData:data];
+            }
             
             NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:self.request.URL];
             image = [self scaledImageForKey:key image:image];
