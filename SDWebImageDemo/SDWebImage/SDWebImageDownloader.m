@@ -152,7 +152,7 @@ static NSString *const kCompletedCallbackKey = @"completed";
                                                                      if (!sself) return;
                                                                      [sself removeCallbacksForURL:url];
                                                                  }];
-        if(!CGSizeEqualToSize(wself.imageMaxSize, CGSizeZero))
+        if(wself.imageMaxSize.height*wself.imageMaxSize.width>0)
         {
             operation.imageMaxSize = wself.imageMaxSize;
             wself.imageMaxSize = CGSizeZero;

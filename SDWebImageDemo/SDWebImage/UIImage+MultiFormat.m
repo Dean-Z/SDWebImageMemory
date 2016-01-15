@@ -139,6 +139,9 @@
 
 +(UIImage *)compressImageWith:(UIImage *)image newSize:(CGSize)newSize
 {
+    if (newSize.width*newSize.height == 0) {
+        return image;
+    }
     size_t destWidth, destHeight;
     if (image.size.width < image.size.height)
     {
